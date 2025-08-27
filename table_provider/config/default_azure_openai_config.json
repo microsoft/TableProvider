@@ -1,0 +1,12 @@
+{
+    "call_llm_config": {
+        "endpoint": "your_endpoint",
+        "deployment_name": "your_deployment_name",
+        "model_name": "your_model_name"
+    },
+    "call_embedding_config": {
+        "endpoint": "your_endpoint",
+        "deployment_name": "your_deployment_name",
+        "model_name": "your_model_name"
+    }
+}
