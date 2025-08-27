@@ -1,3 +1,11 @@
+# TAP4LLM: Table Provider on Sampling, Augmenting, and Packing Semi-structured Data for Large Language Model Reasoning
+
+<p align="center">
+  <a href="https://arxiv.org/abs/2312.09039">
+    <img src="https://img.shields.io/badge/arXiv-2312.09039-b31b1b.svg">
+  </a>
+</p>
+
 ## Overview
 - TableProvider is a very large project and has been divided into multiple sub-projects.
 - Now the available table provider is under the python directory, writing in python language, other languages are not supported yet.
@@ -299,3 +307,38 @@ for table_format_type, table_format_result in sampled_table.items():
 ```
 - Table Provider results are saved in the output directory, and Table Provider also return the response to the client side. 
 
+## Citation
+If you find this repository useful, please considering giving ⭐ or citing:
+```
+@misc{sui2024tap4llmtableprovidersampling,
+      title={TAP4LLM: Table Provider on Sampling, Augmenting, and Packing Semi-structured Data for Large Language Model Reasoning}, 
+      author={Yuan Sui and Jiaru Zou and Mengyu Zhou and Xinyi He and Lun Du and Shi Han and Dongmei Zhang},
+      year={2024},
+      eprint={2312.09039},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2312.09039}, 
+}
+```
+
+## Contributing
+
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
+the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+
+When you submit a pull request, a CLA bot will automatically determine whether you need to provide
+a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
+provided by the bot. You will only need to do this once across all repos using our CLA.
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Trademarks
+
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
+trademarks or logos is subject to and must follow 
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
+Any use of third-party trademarks or logos are subject to those third-party's policies.
