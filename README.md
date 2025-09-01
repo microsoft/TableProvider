@@ -6,9 +6,9 @@
 
 ------------------
 
-**Welcome to the Table Provider repository!** This project encompasses two major components designed to advance the understanding and utilization of Large Language Models (LLMs) in handling structured table data. The repository aims to (1) provide the TableProvider Toolkit from our [paper](https://arxiv.org/abs/2312.09039), a versatile pre-processor suite for leveraging LLMs in table-based tasks effectively; and (2) release the **SUC** Benchmark along with comprehensive empirical studies from our [paper](https://dl.acm.org/doi/10.1145/3616855.3635752).
+**Welcome to the Table Provider repository!** This project encompasses two major components designed to advance the understanding and utilization of Large Language Models (LLMs) in handling structured table data. The repository aims to (1) provide the TableProvider Toolkit from our [paper](https://arxiv.org/abs/2312.09039), a versatile pre-processor suite for leveraging LLMs in table-based tasks effectively; and (2) release the **SUC** Benchmark along with comprehensive empirical studies from our [paper](https://dl.acm.org/doi/10.1145/3616855.3635752). Noted that the current table provider only support python language, other languages are not supported yet. 
 
-Noted that now the available table provider is under the python directory, writing in python language, other languages are not supported yet. The README is divided into the usage part and development part, you can read the specific part to this README to get an overview of the project. 
+<!-- Noted that now the available table provider is under the python directory, writing in python language, other languages are not supported yet. The README is divided into the usage part and development part, you can read the specific part to this README to get an overview of the project.  -->
 
 
 <!-- ## Overview
