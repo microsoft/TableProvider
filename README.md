@@ -356,7 +356,7 @@ If you find this repository useful, please considering giving ⭐ or citing:
   title     = {Table Meets LLM: Can Large Language Models Understand Structured Table Data? A Benchmark and Empirical Study},
   author    = {Yuan Sui and Mengyu Zhou and Mingjie Zhou and Shi Han and Dongmei Zhang},
   journal   = {Web Search and Data Mining},
-  year      = {2023},
+  year      = {2024},
   doi       = {10.1145/3616855.3635752},
   bibSource = {Semantic Scholar https://www.semanticscholar.org/paper/f534f566535f4e0fd2b72b1db3b18c47479e5092}
 }
@@ -365,7 +365,7 @@ If you find this repository useful, please considering giving ⭐ or citing:
   title     = {TAP4LLM: Table Provider on Sampling, Augmenting, and Packing Semi-structured Data for Large Language Model Reasoning},
   author    = {Yuan Sui and Jiaru Zou and Mengyu Zhou and Xinyi He and Lun Du and Shi Han and Dongmei Zhang},
   journal   = {Conference on Empirical Methods in Natural Language Processing},
-  year      = {2023},
+  year      = {2024},
   doi       = {10.48550/arXiv.2312.09039},
   bibSource = {Semantic Scholar https://www.semanticscholar.org/paper/00a67af3b7dc785b4813b61d232cc76b4fb2b189}
 }
