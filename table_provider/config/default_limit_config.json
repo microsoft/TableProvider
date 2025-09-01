@@ -1,0 +1,13 @@
+{
+    "task_example_token_limit": {
+      "tabfact": 627,
+      "hybridqa": 1238,
+      "sqa": 1439,
+      "totto": 889,
+      "feverous": 1261
+    },
+    "max_truncate_tokens": 4000,
+    "augmentation_token_limit": 1500,
+    "max_rows": 50,
+    "max_columns": 10
+}
