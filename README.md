@@ -1,15 +1,20 @@
-# TAP4LLM: Table Provider on Sampling, Augmenting, and Packing Semi-structured Data for Large Language Model Reasoning
+# Table Provider
 
-<p align="center">
-  <a href="https://arxiv.org/abs/2312.09039">
-    <img src="https://img.shields.io/badge/arXiv-2312.09039-b31b1b.svg">
-  </a>
-</p>
+**[UPDATE]**: We are excited our paper ["Table Meets LLM: Can Large Language Models Understand Structured Table Data? A Benchmark and Empirical Study"](https://dl.acm.org/doi/10.1145/3616855.3635752) has been accepted by WSDM'24!
 
-## Overview
-- TableProvider is a very large project and has been divided into multiple sub-projects.
-- Now the available table provider is under the python directory, writing in python language, other languages are not supported yet.
-- The README is divided into the usage part and development part, you can read the specific part to this README to get an overview of the project.
+**[UPDATE]**: We are excited our paper ["TAP4LLM: Table Provider on Sampling, Augmenting, and Packing Semi-structured Data for Large Language Model Reasoning"](https://arxiv.org/abs/2312.09039) has been accepted by EMNLP'24!
+
+------------------
+
+**Welcome to the Table Provider repository!** This project encompasses two major components designed to advance the understanding and utilization of Large Language Models (LLMs) in handling structured table data. The repository aims to (1) provide the TableProvider Toolkit from our [paper](https://arxiv.org/abs/2312.09039), a versatile pre-processor suite for leveraging LLMs in table-based tasks effectively; and (2) release the **SUC** Benchmark along with comprehensive empirical studies from our [paper](https://dl.acm.org/doi/10.1145/3616855.3635752).
+
+Noted that now the available table provider is under the python directory, writing in python language, other languages are not supported yet. The README is divided into the usage part and development part, you can read the specific part to this README to get an overview of the project. 
+
+
+<!-- ## Overview
+- TableProvider is a very large project and has been divided into multiple sub-projects including benchmarks, and toolkits.
+- 
+- -->
 
 
 ## Introduction for development
@@ -141,6 +146,7 @@ With the new environment created, you can activate it and run the project.
 
 ### Table Provider Demo
 You can run the demo under the test folder
+
 
 ## Introduction for usage(Two ways)
 ### Way1 - Python Package
@@ -307,17 +313,61 @@ for table_format_type, table_format_result in sampled_table.items():
 ```
 - Table Provider results are saved in the output directory, and Table Provider also return the response to the client side. 
 
+
+## SUC Benchmark
+
+**SUC (Structured Understanding Capabilities)** is a comprehensive benchmark introduced to evaluate and detect the structural understanding capabilities of Large Language Models when interacting with table data. The benchmark comprises a variety of tasks designed with increasing difficulty levels to thoroughly assess different aspects of table comprehension and manipulation.
+
+**Key Features**:
+* *Diverse Datasets*: Supports multiple datasets such as TabFact, FEVEROUS, SQA, HybridQA, and ToTTo.
+* *Flexible Task Settings*: Offers zero-shot, one-shot, and multiple input choice configurations to cater to various experimental setups.
+* *Task Customization*: Allows customization through multiple arguments, enabling users to tailor the benchmark according to their specific research needs.
+* *Empirical Studies*: Facilitates in-depth empirical analysis to understand how different input designs and configurations impact LLM performance on structured table tasks.
+
+**Repository Structure**:
+* [table_meets_llm/unified_benchmark_generate.sh](table_meets_llm/unified_benchmark_generate.sh): Main script for generating benchmark tasks with customizable settings.
+* [table_meets_llm/unified_babel_convertor.sh](table_meets_llm/unified_babel_convertor.sh): Shell script containing examples of multiple argument configurations.
+* [table_meets_llm/dataset_collection](table_meets_llm/dataset_collection): Code for dataset collection using Hugging Face datasets as dataloaders.
+* [table_meets_llm/utils/structured_data_linearize.py](table_meets_llm/utils/structured_data_linearize.py): Serialization functions for various data linearization formats.
+
+**Getting Started**:
+
+To generate the SUC benchmark tasks, navigate to the 'table_meets_LLM' and execute the relevant Python scripts with desired arguments. For detailed command usage, refer to the [table_meets_llm/unified_benchmark_generate.sh](table_meets_llm/unified_benchmark_generate.sh) script and the inline help descriptions within [table_meets_llm/main/unified_benchmark_generator.py](table_meets_llm/main/unified_benchmark_generator.py). The code associated with downstream tasks can be found in [table_meets_llm/main/unified_babel_convertor.py](table_meets_llm/main/unified_babel_convertor.py). The downstream tasks setting support both manual prompting engineering and self-augmented prompting. Multiple prompt choices can be found in [table_meets_llm/main/config.py](table_meets_llm/main/config.py).
+
+
+```bash
+cd table_meets_llm
+
+# generate table/databases downstream tasks
+python unified_babel_convertor.py --task cosql dart tabfact feverous tabfact hybridqa spider totto sql2text logic2text sqa webqsp --objective zero --split train validation --unified --unified_file_output ./exps/downstream_tasks_20230113_log/
+
+# generate self-augmented information
+python unified_babel_convertor.py --task totto tabfact hybridqa sqa feverous --objective oneshot --heuristic heur_8 --split validation --unified --unified_file_output  ./exps/downstream_tasks_20230120_self_augmented_p2_log/heur_8  --linear_func html
+python unified_babel_convertor.py --task totto tabfact hybridqa sqa feverous --objective oneshot --heuristic heur_9 --split validation --unified --unified_file_output ./exps/downstream_tasks_20230120_self_augmented_p2_log/heur_9  --linear_func html
+python unified_babel_convertor.py --task totto tabfact hybridqa sqa feverous --objective oneshot --heuristic heur_10 --split validation --unified --unified_file_output ./exps/downstream_tasks_20230120_self_augmented_p2_log/heur_10 --linear_func html
+
+# more detailed information can be found in unified_bael_convertor.sh
+```
+
 ## Citation
 If you find this repository useful, please considering giving ⭐ or citing:
 ```
-@misc{sui2024tap4llmtableprovidersampling,
-      title={TAP4LLM: Table Provider on Sampling, Augmenting, and Packing Semi-structured Data for Large Language Model Reasoning}, 
-      author={Yuan Sui and Jiaru Zou and Mengyu Zhou and Xinyi He and Lun Du and Shi Han and Dongmei Zhang},
-      year={2024},
-      eprint={2312.09039},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2312.09039}, 
+@article{sui2023table,
+  title     = {Table Meets LLM: Can Large Language Models Understand Structured Table Data? A Benchmark and Empirical Study},
+  author    = {Yuan Sui and Mengyu Zhou and Mingjie Zhou and Shi Han and Dongmei Zhang},
+  journal   = {Web Search and Data Mining},
+  year      = {2023},
+  doi       = {10.1145/3616855.3635752},
+  bibSource = {Semantic Scholar https://www.semanticscholar.org/paper/f534f566535f4e0fd2b72b1db3b18c47479e5092}
+}
+
+@article{sui2023tap4llm,
+  title     = {TAP4LLM: Table Provider on Sampling, Augmenting, and Packing Semi-structured Data for Large Language Model Reasoning},
+  author    = {Yuan Sui and Jiaru Zou and Mengyu Zhou and Xinyi He and Lun Du and Shi Han and Dongmei Zhang},
+  journal   = {Conference on Empirical Methods in Natural Language Processing},
+  year      = {2023},
+  doi       = {10.48550/arXiv.2312.09039},
+  bibSource = {Semantic Scholar https://www.semanticscholar.org/paper/00a67af3b7dc785b4813b61d232cc76b4fb2b189}
 }
 ```
 
