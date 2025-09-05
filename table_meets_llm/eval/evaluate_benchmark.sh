@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 # form benchmark evaluation
 #python evaluate_benchmark.py --task_group form --log_file_path form_benchmarks_20230115_log --model text003 text002
 #===================

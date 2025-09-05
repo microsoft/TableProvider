@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 DATASETS = {
     "table": ["tabfact", "sqa", "hybridqa", "gittables", "feverous", "totto"],
     "database": ["spider", "cosql", "logic2text", "sql2text"],

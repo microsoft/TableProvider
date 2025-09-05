@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 # generate form downstream tasks
 python unified_babel_convertor.py --task formlm_opt formlm_qa formlm_block_type --objective zero --split train validation --unified --unified_file_output ./exps/downstream_tasks_form_20230115_log/
 

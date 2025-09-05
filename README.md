@@ -6,62 +6,86 @@
 
 ------------------
 
-**Welcome to the Table Provider repository!** This project encompasses two major components designed to advance the understanding and utilization of Large Language Models (LLMs) in handling structured table data. The repository aims to (1) provide the TableProvider Toolkit from our [paper](https://arxiv.org/abs/2312.09039), a versatile pre-processor suite for leveraging LLMs in table-based tasks effectively; and (2) release the **SUC** Benchmark along with comprehensive empirical studies from our [paper](https://dl.acm.org/doi/10.1145/3616855.3635752). Noted that the current table provider only support python language, other languages are not supported yet. 
+## Table of Contents
 
-<!-- Noted that now the available table provider is under the python directory, writing in python language, other languages are not supported yet. The README is divided into the usage part and development part, you can read the specific part to this README to get an overview of the project.  -->
+- [Overview](#overview)
+- [Environment Setup](#environment)
+- [Architecture Design](#architecture-design)
+- [Usage](#usage)
+  - [Python Package](#way1---python-package)
+  - [Flask API](#way2---flask-api)
+- [SUC Benchmark](#suc-benchmark)
+- [Contributing](#contributing)
+- [Citation](#citation)
+- [License](#license)
+
+------------------
+
+## Overview
+
+**Welcome to the Table Provider repository!** This project encompasses two major components designed to advance the understanding and utilization of Large Language Models (LLMs) in handling structured table data:
+
+1. **TableProvider Toolkit**: A versatile pre-processor suite for leveraging LLMs in table-based tasks effectively, from our [TAP4LLM paper](https://arxiv.org/abs/2312.09039)
+2. **SUC Benchmark**: A comprehensive benchmark for evaluating LLM capabilities with structured table data, from our [Table Meets LLM paper](https://dl.acm.org/doi/10.1145/3616855.3635752)
+
+### Key Features
+
+- **Table Processing Pipeline**: Complete workflow for loading, sampling, augmenting, and formatting table data
+- **Multiple Sampling Strategies**: Evenly, random, clustering, and sequential sampling methods
+- **Rich Augmentation Options**: Table size adjustment, metadata addition, column analysis, and more
+- **Flexible Output Formats**: HTML, JSON, Markdown, LaTeX, and other formats
+- **Benchmark Suite**: Comprehensive evaluation framework for table understanding tasks
+
+> **Note**: The current table provider only supports Python. Other languages are not supported yet.
+
+<!-- Note that the available table provider is under the python directory, written in Python language. Other languages are not supported yet. The README is divided into the usage part and development part. You can read the specific part of this README to get an overview of the project. -->
 
 
-<!-- ## Overview
-- TableProvider is a very large project and has been divided into multiple sub-projects including benchmarks, and toolkits.
-- 
-- -->
-
-
-## Introduction for development
-This is the a python library for the Table Provider implementation. The module povides an integration for multiples types of table sampling, augmentation, and packing.  
+## Introduction for Development
+This is a Python library for the Table Provider implementation. The module provides integration for multiple types of table sampling, augmentation, and packing.  
 
 ## Environment
-You can `cd` to the root directory, and use the
+You can `cd` to the root directory and use the
 ```shell
 conda env create -f environment.yml
 conda activate table_provider
 ```
 to create an environment named `table_provider` with all the required packages.
 With the new environment created, you can activate it and run the project.
-> In practice, you may meet the permission problem when create the conda environment. 
+> In practice, you may encounter permission problems when creating the conda environment.
 > You can use `sudo -s` on Linux/Mac or run the command prompt as administrator on Windows to solve the problem.
 
 ## Architecture Design
 ### Overview
-- All default configurations are under the config directory, all table provider content are under the app directory.
+- All default configurations are under the config directory, all table provider content is under the app directory.
 - Table Provider encompasses a multitude of functional components, such as table loading, sampling, augmentation, and formatting. It functions as an integrated pipeline that processes tables efficiently. Each of these components not only contributes to the comprehensive service offered by the Table Provider but can also operate independently as standalone services, catering to specific needs.
-  - Table Loading: This module is responsible for importing data from `task` or `input`, `input` is the input from users, and `task` is the input from specific tasks that can be used in table provider. 
+  - Table Loading: This module is responsible for importing data from `task` or `input`. `input` is the input from users, and `task` is the input from specific tasks that can be used in the table provider. 
   - Table Sampling: This module is responsible for sampling tables based on different strategies, such as `evenly_sample`, `random_sample`, `embedding_sample`, and `clustering_sample`.
   - Table Augmentation: This module is responsible for augmenting tables based on different strategies, such as `table_size`, `metadata`, `header_field_categories`, `trunk_summary`, `intermediate_NL_reasoning_steps`, `term_explanations`, and `docs_references`.
   - Table Format: This module is responsible for formatting tables into strings with specific formats, such as `html`, `json`, `csv`, and `tsv`.
 - The Table Provider is designed to provide a flexible and scalable solution for table processing. 
-  - The controllers are defined under the `controller` folder in `app` directory. Controller is the entrance to the app.
-  - The services are defined under the `service` folder in `app` directory. Services are used to interact with the data layer and perform business logic.
-  - The extensions and orchestrators are defined in `orchestrator` folder in `app` directory.
+  - The controllers are defined under the `controller` folder in the `app` directory. The controller is the entrance to the app.
+  - The services are defined under the `service` folder in the `app` directory. Services are used to interact with the data layer and perform business logic.
+  - The extensions and orchestrators are defined in the `orchestrator` folder in the `app` directory.
     - The extensions are used to extend the functionality of the app.
     - The orchestrators are used to orchestrate the extensions.
     - To extend the table provider pipeline, you can add a new extension to complete the function and register it in the orchestrator.
-  - The entities and models are defined under the `model` folder in `app` directory.
-    - dto: The data transfer classes are defined here. Dto is used to transfer data between different layers and interact with users.
+  - The entities and models are defined under the `model` folder in the `app` directory.
+    - dto: The data transfer classes are defined here. DTO is used to transfer data between different layers and interact with users.
     - config: The configuration classes are defined here. The configuration files are used to define the configurations of the table provider.
-    - llm: The llm model client classes are defined here. The llm model client is used to interact with the llm model or endpoints on Azure.
-    - feature_extraction/metadata: The feature extraction and metadata classes are defined here. The feature extraction and metadata classes are used to extract features and metadata from the table.
-  - The prompts are defined under the `prompt` folder in `app` directory. The prompts are used to define the prompts for the llm model.
-  - The utils are defined under the `utils` folder in `app` directory. The utils are used to define the utility functions for the table provider.
-  - The tasks are defined under the `tasks` folder in `app` directory. The tasks are used to define the specific tasks for the table provider.
-  - The libs are defined under the `libs` folder in `app` directory. The libs are used to define the libraries for the table provider, such as the logger for logging. More app base classes can be defined here.
-  - `config` directory contains the configuration files for the table provider, such as the configuration for the llm model.
+    - llm: The LLM model client classes are defined here. The LLM model client is used to interact with the LLM model or endpoints on Azure.
+    - feature_extraction/metadata: The feature extraction and metadata classes are defined here. These classes are used to extract features and metadata from the table.
+  - The prompts are defined under the `prompt` folder in the `app` directory. The prompts are used to define the prompts for the LLM model.
+  - The utils are defined under the `utils` folder in the `app` directory. The utils are used to define the utility functions for the table provider.
+  - The tasks are defined under the `tasks` folder in the `app` directory. The tasks are used to define the specific tasks for the table provider.
+  - The libs are defined under the `libs` folder in the `app` directory. The libs are used to define the libraries for the table provider, such as the logger for logging. More app base classes can be defined here.
+  - `config` directory contains the configuration files for the table provider, such as the configuration for the LLM model.
   - `test` directory contains the test cases for the table provider, such as the functionality test cases for the table provider.
 
 ### Request Introduction
 #### TableLoaderRequest
 > This class is used to specify how to load the table data.
-- table_source (str): Specifies the source of the table (e.g., user input or task). It must be a valid source defined in the TableSource enumeration. 
+- table_source (str): Specifies the source of the table (e.g., user input or task). It must be a valid source defined in the TableSource enumeration.
 - table_name (Optional, str or list): The name of the table. Required if the source is input. If there are multiple tables, the names should be provided as a list.
 - table_header (Optional, str or list): The header(s) of the table. Required if the source is input. If there are multiple tables, the table headers should be provided as a list.
 - table_content (Optional, str or list): The content of the table. Required if the source is input. If there are multiple tables, the table contents should be provided as a list.
@@ -70,7 +94,7 @@ With the new environment created, you can activate it and run the project.
 - split (Optional, str): Specifies how to split the data, with a default value of "None".
 - load_local_dataset (Optional, bool): Flag to indicate whether to load a local dataset (default is False).
 - use_small_sample_list (Optional, bool): Indicates if a small sample list should be used (default is False).
-> Validation Conditions: The table_source must be valid, and if it's input, then table_name, table_header, and table_content must all be provided. If it’s from a task, then task_name must be provided.
+> Validation Conditions: The table_source must be valid, and if it's input, then table_name, table_header, and table_content must all be provided. If it's from a task, then task_name must be provided.
 
 #### TableSamplingRequest
 > This class is used to specify how to sample the table data.
@@ -142,17 +166,14 @@ With the new environment created, you can activate it and run the project.
     - CSV (csv): Outputs the table in Comma-Separated Values format, a common format for data exchange. 
 
 
+## Usage
 
 
-### Table Provider Demo
-You can run the demo under the test folder
-
-
-## Introduction for usage(Two ways)
+## Introduction for Usage (Two Ways)
 ### Way1 - Python Package
 #### Python Package Install
-- You can install table provider as python package under the dist directory under the python directory.
-- You can follow the instruction below to install the table_provider
+- You can install table provider as a Python package under the dist directory under the python directory.
+- You can follow the instructions below to install the table_provider
 ```shell
 conda create --name table_provider python=3.10
 conda activate table_provider
@@ -160,13 +181,13 @@ cd python\dist
 pip install table_provider-0.1.0-py3-none-any.whl
 ```
 
-#### Azure login
-- The default llm resources are LLM team's resources. You can ignore the resource configuration directly if you're a member of Excel team after az login.
-- If you aren't a member in Excel, you should have your own LLM resources in AOAI, and pass the LLM configuration in the input.
+#### Azure Login
+- The default LLM resources are the LLM team's resources. You can ignore the resource configuration directly if you're a member of the Excel team after az login.
+- If you aren't a member of the Excel team, you should have your own LLM resources in AOAI and pass the LLM configuration in the input.
 
-#### Usage example
-- After installation of table provider, you're able to use the classes and functions under it.
-- A demo is like
+#### Usage Example
+- After installation of the table provider, you're able to use the classes and functions under it.
+- A demo is as follows:
 ```python
 import pandas as pd
 from table_provider.controller.table_provider_controller import TableProviderController
@@ -180,7 +201,7 @@ class CustomJsonTableProviderPipeline:
     def demo_csv_table_provider(input_file_path):
         df = pd.read_csv(input_file_path)
 
-        # 转换timestamp列为string
+        # convert timestamp to string
         for col in df.columns:
             if pd.api.types.is_datetime64_any_dtype(df[col]):
                 df[col] = df[col].astype(str)
@@ -241,8 +262,8 @@ if __name__ == '__main__':
 
 
 ### Way2 - Flask API
-- Table Provider can be called in other python files as a service endpoint, you can start the server by running `python main.py'
-The client side can use the table provider service by using a http call:
+- Table Provider can be called in other Python files as a service endpoint. You can start the server by running `python main.py`
+The client side can use the table provider service by making an HTTP call:
 ```python
 table = pd.read_csv(file_path)
 file_name = str(file_path).split("\\")[-1].split(".")[0]
@@ -291,8 +312,8 @@ headers = {
 response = requests.request("POST", url, headers=headers, data=payload).text
 ```
 - You just need to fill the payload with the table data and the configurations you want to use, then send the request to the server.
-- The server endpoint can be called not only in python but also in any service that can make a http call.
-An example to parse the http call response is:
+- The server endpoint can be called not only in Python but also in any service that can make an HTTP call.
+An example to parse the HTTP call response is:
 ```python
 composition_result = []
 augmentation_info = []
@@ -311,7 +332,7 @@ for table_format_type, table_format_result in sampled_table.items():
         for table_augmentation_type, table_augmentation_results in augmentation_info.items():
             table_augmentation_result = table_augmentation_results[0]
 ```
-- Table Provider results are saved in the output directory, and Table Provider also return the response to the client side. 
+- Table Provider results are saved in the output directory, and Table Provider also returns the response to the client side. 
 
 
 ## SUC Benchmark
@@ -332,7 +353,7 @@ for table_format_type, table_format_result in sampled_table.items():
 
 **Getting Started**:
 
-To generate the SUC benchmark tasks, navigate to the 'table_meets_LLM' and execute the relevant Python scripts with desired arguments. For detailed command usage, refer to the [table_meets_llm/unified_benchmark_generate.sh](table_meets_llm/unified_benchmark_generate.sh) script and the inline help descriptions within [table_meets_llm/main/unified_benchmark_generator.py](table_meets_llm/main/unified_benchmark_generator.py). The code associated with downstream tasks can be found in [table_meets_llm/main/unified_babel_convertor.py](table_meets_llm/main/unified_babel_convertor.py). The downstream tasks setting support both manual prompting engineering and self-augmented prompting. Multiple prompt choices can be found in [table_meets_llm/main/config.py](table_meets_llm/main/config.py).
+To generate the SUC benchmark tasks, navigate to the 'table_meets_llm' directory and execute the relevant Python scripts with desired arguments. For detailed command usage, refer to the [table_meets_llm/unified_benchmark_generate.sh](table_meets_llm/unified_benchmark_generate.sh) script and the inline help descriptions within [table_meets_llm/main/unified_benchmark_generator.py](table_meets_llm/main/unified_benchmark_generator.py). The code associated with downstream tasks can be found in [table_meets_llm/main/unified_babel_convertor.py](table_meets_llm/main/unified_babel_convertor.py). The downstream tasks setting supports both manual prompt engineering and self-augmented prompting. Multiple prompt choices can be found in [table_meets_llm/main/config.py](table_meets_llm/main/config.py).
 
 
 ```bash
@@ -346,11 +367,11 @@ python unified_babel_convertor.py --task totto tabfact hybridqa sqa feverous --o
 python unified_babel_convertor.py --task totto tabfact hybridqa sqa feverous --objective oneshot --heuristic heur_9 --split validation --unified --unified_file_output ./exps/downstream_tasks_20230120_self_augmented_p2_log/heur_9  --linear_func html
 python unified_babel_convertor.py --task totto tabfact hybridqa sqa feverous --objective oneshot --heuristic heur_10 --split validation --unified --unified_file_output ./exps/downstream_tasks_20230120_self_augmented_p2_log/heur_10 --linear_func html
 
-# more detailed information can be found in unified_bael_convertor.sh
+# More detailed information can be found in unified_babel_convertor.sh
 ```
 
 ## Citation
-If you find this repository useful, please considering giving ⭐ or citing:
+If you find this repository useful, please consider giving ⭐ or citing:
 ```
 @article{sui2023table,
   title     = {Table Meets LLM: Can Large Language Models Understand Structured Table Data? A Benchmark and Empirical Study},

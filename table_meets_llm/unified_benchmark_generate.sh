@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 ## zero-shot
 python unified_benchmark_generator.py --dataset tabfact feverous sqa hybridqa totto --objective zero-shot --split validation --linearize_list html --use_partition_mark --use_format_explanation --use_role_prompting
 # all format without 1-shot

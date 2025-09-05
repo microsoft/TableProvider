@@ -1,3 +1,6 @@
+# coding=utf-8
+# Copyright The HuggingFace Datasets Authors.
+
 import json
 import os
 import sqlite3

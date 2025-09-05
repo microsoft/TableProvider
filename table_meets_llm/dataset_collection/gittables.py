@@ -1,3 +1,6 @@
+# coding=utf-8
+# Copyright The HuggingFace Datasets Authors.
+
 import csv
 import json
 from typing import List

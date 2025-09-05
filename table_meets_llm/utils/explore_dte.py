@@ -1,12 +1,14 @@
-import json
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
 
+import json
+import os
+import argparse
+import random
 from tprompt.dte.embedding import DTEEmbedding
 from tprompt.dte.generator import generate_embeddings
 from tprompt.dte.download import download_dte
 from tprompt.dte.retriever import retrieve
-import os
-import argparse
-import random
 
 # import model config
 model_path = download_dte(use_cached=True)

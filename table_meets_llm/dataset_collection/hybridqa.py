@@ -1,5 +1,7 @@
-import json
+# coding=utf-8
+# Copyright The HuggingFace Datasets Authors.
 
+import json
 import datasets
 import os
 import nltk

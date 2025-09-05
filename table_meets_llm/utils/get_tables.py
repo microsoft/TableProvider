@@ -1,11 +1,15 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 import os
 import sys
 import json
 import sqlite3
+import traceback
 from os import listdir, makedirs
 from os.path import isfile, isdir, join, split, exists, splitext
 from nltk import word_tokenize, tokenize
-import traceback
+
 
 EXIST = {"atis", "geo", "advising", "yelp", "restaurants", "imdb", "academic"}
 
