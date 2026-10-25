@@ -115,7 +115,7 @@ With the new environment created, you can activate it and run the project.
 #### TableFormatRequest
 > This class is used to specify how to format the table data.
 - format_type (Union[str, list]): Specifies the format(s) for the output (must be valid formats from TableFormatType).
-- unique_format_id (Optional, str): An optional identifier for the format.
+- unique_format_id (Optional, str): An optional single-component ASCII identifier, starting with a letter or digit and containing only letters, digits, underscores, or hyphens (maximum 128 characters). Empty values are treated as absent. Paths, dots, separators, and encoded traversal are rejected.
 - enable_composition (bool): Flag to indicate if composition of multiple formats is allowed (default is False).
 - enable_separate (bool): Flag to indicate if outputs should be separated (default is False).
 > Validation Conditions: format_type must be a string or a list of valid formats.
@@ -262,9 +262,39 @@ if __name__ == '__main__':
 
 
 ### Way2 - Flask API
-- Table Provider can be called in other Python files as a service endpoint. You can start the server by running `python main.py`
+- Table Provider can be called in other Python files as a service endpoint. Configure a private random token before starting the server. For a local POSIX shell:
+
+```sh
+export TABLEPROVIDER_API_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+python main.py
+```
+
+The server refuses to start without a 32-512 character non-whitespace ASCII token.
+Distribute it only to trusted clients via a secret manager or their environment;
+do not commit it, print it in logs, put it in a URL, or send it to a web page.
+All API routes, including test routes, require `Authorization: Bearer <token>`.
+Cookies and query-string tokens are not accepted. Debug mode and the development
+reloader are disabled by default.
+
+The default exact Host allowlist is `127.0.0.1:8080,localhost:8080,[::1]:8080`.
+Set `TABLEPROVIDER_ALLOWED_HOSTS` to a comma-separated list of exact trusted
+hostnames and ports if needed; wildcards and URLs are rejected. Do not allow
+arbitrary DNS names. Origin-bearing requests must match the request's own origin,
+and cross-site/same-site Fetch Metadata requests are rejected. The application
+does not enable cross-origin access or trust forwarded Host headers. Keep the
+service on loopback; any non-loopback deployment needs HTTPS and a securely
+configured proxy and access boundary. Explicit bearer authentication, not ambient
+browser credentials, is the CSRF boundary.
+
+The default request body limit is 1 MiB. Invalid JSON objects or model fields are
+rejected before pipeline execution. Applications embedding the routes must use
+`init_routes(app)`, which installs the same guard, or `main.create_app(config)`.
+
 The client side can use the table provider service by making an HTTP call:
 ```python
+import os
+import uuid
+
 table = pd.read_csv(file_path)
 file_name = str(file_path).split("\\")[-1].split(".")[0]
 
@@ -300,13 +330,14 @@ payload = json.dumps({
         "format_type": ["html", "json", "ellipsis_txt"],
         "enable_composition": True,
         "enable_separate": True,
-        "unique_format_id": file_name,
+        "unique_format_id": uuid.uuid4().hex,
     }
 })
 
-url = "http://127.0.0.1:8080/table-provider/execution"
+url = "http://127.0.0.1:8080/table_provider/execution"
 headers = {
-    'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'Authorization': f"Bearer {os.environ['TABLEPROVIDER_API_TOKEN']}"
 }
 
 response = requests.request("POST", url, headers=headers, data=payload).text
@@ -334,6 +365,37 @@ for table_format_type, table_format_result in sampled_table.items():
 ```
 - Table Provider results are saved in the output directory, and Table Provider also returns the response to the client side. 
 
+### Output security and regression tests
+
+Formatted JSONL output is confined to `table_provider_output`. The writer uses
+directory-relative file descriptors with no-follow directory traversal and
+exclusive file creation, rather than a check-then-open pathname. It rejects
+parent traversal and symlinks, creates new directories with mode 0700 and files
+with mode 0600, and skips existing regular files without overwriting them.
+Keep this output directory and its parent under the service account's control.
+Race-resistant writing requires POSIX `dir_fd`, `O_DIRECTORY`, and `O_NOFOLLOW`
+support (for example Linux). Other platforms, including native Windows, fail
+closed instead of using an unsafe fallback; run the service in a supported Linux
+environment when saving formatted output. JSONL remains plaintext, not encrypted
+storage; apply appropriate storage encryption, retention, and access policies.
+
+Run the focused security regressions from the repository root:
+
+```sh
+python -B -m unittest discover -s test -p test_security.py -v
+```
+
+The tests use real Flask, Flask-RESTful, Pydantic, pandas, and POSIX filesystem
+operations. Heavy LLM orchestration and formatting services are replaced with
+test doubles; no cloud credentials, model calls, or full benchmark datasets are
+required. They cover authentication, Origin/Host/Fetch Metadata checks, DNS
+rebinding-style requests, CORS preflight, payload limits, actual route/model
+validation, and output traversal/symlink/overwrite protection.
+
+These changes address the Web CSRF/DNS-rebinding entry point and output path
+traversal. They do not sandbox existing model-generated Python execution in
+`auto_row_filter` or other LLM features. Only trusted callers should receive the
+API token; do not process attacker-controlled model code with host privileges.
 
 ## SUC Benchmark
 

@@ -2,13 +2,12 @@
 # Licensed under the MIT License.
 
 import datetime
-import json
-import os
 
 import pandas as pd
 from tqdm import tqdm
 
 from table_provider import output_directory
+from table_provider.libs.safe_output import validate_output_id, write_jsonl
 from table_provider.model.dto.table_provider_context import TableProviderContext
 from table_provider.model.dto.table_provider_request import TableProviderRequest
 from table_provider.model.dto.table_provider_response import TableProviderResponse
@@ -43,18 +42,8 @@ class TableFormatExtension(ExtensionBase):
         return result
 
     def _save_to_jsonl(self, file_path, data_list):
-        # if the file already exists, skip it
-        if os.path.exists(file_path):
+        if not write_jsonl(output_directory, file_path, data_list):
             self.logger.info(f"File already exists: {file_path}")
-        # if the path doesn't exist, create it
-        file_dir = os.path.dirname(file_path)
-        if not os.path.exists(file_dir):
-            os.makedirs(file_dir)
-
-        with open(file_path, 'w') as file:
-            for item in data_list:
-                json_string = json.dumps(item)
-                file.write(json_string + '\n')
 
     def _execute_internal(self, request: TableProviderRequest, context: TableProviderContext,
                           response: TableProviderResponse):
@@ -69,7 +58,7 @@ class TableFormatExtension(ExtensionBase):
         enable_separate = request.table_format.enable_separate
         table_formatter = TableFormatter(request.llm_azure_openai_config)
         formatted_today = datetime.date.today().strftime('%y%m%d')
-        unique_format_id = request.table_format.unique_format_id
+        unique_format_id = validate_output_id(request.table_format.unique_format_id)
         output_dir = output_directory
         result_map = {}
 

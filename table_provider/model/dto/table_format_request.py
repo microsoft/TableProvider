@@ -6,6 +6,7 @@ from pydantic import BaseModel, model_validator
 
 # 假设 TableFormatType 是一个枚举类，定义了所有有效的格式类型
 from table_provider.model.table_provider_enum import TableFormatType
+from table_provider.libs.safe_output import validate_output_id
 
 class TableFormatRequest(BaseModel):
     format_type: Union[str, List[str]] = None
@@ -22,6 +23,8 @@ class TableFormatRequest(BaseModel):
     @model_validator(mode='before')
     @classmethod
     def validate_table_format(cls, values: dict) -> dict:
+        values = dict(values)
+        values["unique_format_id"] = validate_output_id(values.get("unique_format_id"))
         format_type = values.get('format_type')
         if isinstance(format_type, str):
             cls.validate_single_format_type(format_type)
