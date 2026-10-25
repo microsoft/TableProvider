@@ -1,8 +1,9 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
 
-from flask import request
+from flask import abort, request
 from flask_restful import Resource
+from pydantic import ValidationError
 
 from table_provider.model.dto.table_provider_context import TableProviderContext
 from table_provider.model.dto.table_provider_request import TableProviderRequest
@@ -24,7 +25,12 @@ class TableProviderExecutionApi(Resource):
 
     def post(self):
         user_input = request.get_json()
-        table_provider_request = TableProviderRequest(**user_input)
+        if not isinstance(user_input, dict):
+            abort(400, description="Expected a JSON object")
+        try:
+            table_provider_request = TableProviderRequest(**user_input)
+        except ValidationError:
+            abort(400, description="Invalid TableProvider request")
         table_provider_context = TableProviderContext()
         table_provider_response = TableProviderResponse()
         self.table_provider_orchestrator.execute(table_provider_request, table_provider_context, table_provider_response)
